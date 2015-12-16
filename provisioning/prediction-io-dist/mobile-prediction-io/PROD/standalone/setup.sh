@@ -24,3 +24,5 @@ cp /root/files/pio-env.sh PredictionIO-0.9.5/conf/
 cp /root/files/java_home.sh /etc/profile.d/
 
 chown ubuntu.ubuntu -R PredictionIO-0.9.5
+
+sudo su ubuntu -c /opt/PredictionIO-0.9.5/bin/pio-start-all
