@@ -2,12 +2,12 @@
   "comment":" This config file uses default settings for all but the required values see README.md for docs",
   "id": "default",
   "description": "Default settings",
-  "engineFactory": "org.template.RecommendationEngine",
+  "engineFactory": "com.gu.RecommendationEngine",
   "datasource": {
     "params" : {
       "name": "sample-handmade-data.txt",
       "appName": "MyGuardianTestEngine-1",
-      "eventNames": ["purchase", "view"]
+      "eventNames": [ "view" ]
     }
   },
   "sparkConf": {
@@ -27,7 +27,7 @@
         "indexName": "urindex",
         "typeName": "items",
         "comment": "must have data for the first event or the model will not build, other events are optional",
-        "eventNames": ["purchase", "view"]
+        "eventNames": [ "view" ]
       }
     }
   ]
