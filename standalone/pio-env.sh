@@ -20,7 +20,7 @@ SPARK_HOME=$PIO_HOME/vendors/spark-1.5.1-bin-hadoop2.6/
 
 # HBASE_CONF_DIR: You must configure this if you intend to run PredictionIO
 #                 with HBase on a remote cluster.
-# HBASE_CONF_DIR=$PIO_HOME/vendors/hbase-1.0.0/conf
+HBASE_CONF_DIR=$PIO_HOME/vendors/hbase-1.0.2/conf
 
 # Filesystem paths where PredictionIO uses as block storage.
 PIO_FS_BASEDIR=$HOME/.pio_store
@@ -67,7 +67,7 @@ PIO_STORAGE_SOURCES_PGSQL_PASSWORD=pio
 # Elasticsearch Example
 PIO_STORAGE_SOURCES_ELASTICSEARCH_TYPE=elasticsearch
 PIO_STORAGE_SOURCES_ELASTICSEARCH_CLUSTERNAME=recommendations-cluster
-PIO_STORAGE_SOURCES_ELASTICSEARCH_HOSTS=localhost
+PIO_STORAGE_SOURCES_ELASTICSEARCH_HOSTS=10.248.141.253
 PIO_STORAGE_SOURCES_ELASTICSEARCH_PORTS=9300
 PIO_STORAGE_SOURCES_ELASTICSEARCH_HOME=$PIO_HOME/vendors/elasticsearch-1.4.4
 

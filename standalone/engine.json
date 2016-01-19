@@ -15,8 +15,10 @@
     "spark.kryo.registrator": "org.apache.mahout.sparkbindings.io.MahoutKryoRegistrator",
     "spark.kryo.referenceTracking": "false",
     "spark.kryoserializer.buffer": "300m",
-    "spark.executor.memory": "4g",
-    "es.index.auto.create": "true"
+    "spark.executor.memory": "3g",
+    "spark.default.parallelism": "4",
+    "es.index.auto.create": "true",
+    "es.nodes": "10.248.141.253"
   },
   "algorithms": [
     {
