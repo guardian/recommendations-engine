@@ -16,7 +16,7 @@ SPARK_HOME=$PIO_HOME/vendors/spark-1.5.1-bin-hadoop2.6/
 
 # HADOOP_CONF_DIR: You must configure this if you intend to run PredictionIO
 #                  with Hadoop 2.
-# HADOOP_CONF_DIR=/opt/hadoop
+HADOOP_CONF_DIR=$PIO_HOME/conf/hadoop
 
 # HBASE_CONF_DIR: You must configure this if you intend to run PredictionIO
 #                 with HBase on a remote cluster.
@@ -45,7 +45,7 @@ PIO_STORAGE_REPOSITORIES_EVENTDATA_NAME=pio_event
 PIO_STORAGE_REPOSITORIES_EVENTDATA_SOURCE=HBASE
 
 PIO_STORAGE_REPOSITORIES_MODELDATA_NAME=pio_model
-PIO_STORAGE_REPOSITORIES_MODELDATA_SOURCE=LOCALFS
+PIO_STORAGE_REPOSITORIES_MODELDATA_SOURCE=HDFS
 
 # Storage Data Sources
 
@@ -78,3 +78,7 @@ PIO_STORAGE_SOURCES_LOCALFS_PATH=$PIO_FS_BASEDIR/models
 # HBase Example
 PIO_STORAGE_SOURCES_HBASE_TYPE=hbase
 PIO_STORAGE_SOURCES_HBASE_HOME=$PIO_HOME/vendors/hbase-1.0.2
+
+# HDFS
+PIO_STORAGE_SOURCES_HDFS_TYPE=hdfs
+PIO_STORAGE_SOURCES_HDFS_PATH=/models

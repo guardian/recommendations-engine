@@ -21,6 +21,10 @@ cp /root/files/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
 cp /root/files/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
 cp /root/files/pio-env.sh PredictionIO-0.9.5/conf/
 
+mkdir PredictionIO-0.9.5/conf/hadoop
+cp /root/files/core-site.xml PredictionIO-0.9.5/conf/hadoop/
+cp /root/files/mapred-site.xml PredictionIO-0.9.5/conf/hadoop/
+
 cp /root/files/java_home.sh /etc/profile.d/
 
 chown ubuntu.ubuntu -R PredictionIO-0.9.5
