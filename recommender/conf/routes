@@ -1,0 +1,7 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET        /healthcheck                     controllers.Application.healthCheck
+# Home page
+GET        /recommendations/:userId         controllers.Application.recommendations(userId)
