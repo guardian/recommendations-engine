@@ -3,7 +3,13 @@ version := "1.0-SNAPSHOT"
 
 scalaVersion := "2.11.6"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, RiffRaffArtifact, JavaAppPackaging)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala, RiffRaffArtifact, JavaAppPackaging)
+  .settings(
+    routesImport += "binders._",
+    routesImport += "models._",
+    routesImport += "org.joda.time.DateTime"
+  )
 
 mappings in Universal ++= (baseDirectory.value / "resources" *** ).get pair relativeTo(baseDirectory.value)
 

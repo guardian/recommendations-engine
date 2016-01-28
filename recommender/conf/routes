@@ -3,5 +3,5 @@
 # ~~~~
 
 GET        /healthcheck                     controllers.Application.healthCheck
-# Home page
-GET        /recommendations/:userId         controllers.Application.recommendations(userId)
+
+GET        /recommendations/:userId         controllers.Application.recommendations(userId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])

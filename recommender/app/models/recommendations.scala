@@ -1,8 +1,19 @@
 package models
 
+import org.joda.time.DateTime
 import play.api.libs.json.Json
 
-case class RecommenderRequest(user: String)
+case class QueryBoost(name: String, values: List[String], bias: Float)
+object QueryBoost {
+  implicit val jf = Json.format[QueryBoost]
+}
+
+case class DateRangeFilter(name: String, before: Option[DateTime] = None, after: Option[DateTime] = None)
+object DateRangeFilter {
+  implicit val jf = Json.format[DateRangeFilter]
+}
+
+case class RecommenderRequest(user: String, fields: List[QueryBoost], dateRange: Option[DateRangeFilter], num: Option[Int])
 object RecommenderRequest {
   implicit val jf = Json.format[RecommenderRequest]
 }

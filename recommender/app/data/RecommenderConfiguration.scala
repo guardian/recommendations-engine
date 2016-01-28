@@ -8,5 +8,9 @@ object RecommenderConfiguration {
   val predictionioBase = conf.getStringProperty("apis.predictionio.base", "")
 
   val mobileItems = conf.getStringProperty("apis.mobile-api.items.base", "")
+
+  val defaultRecommendationsCutoffDays = conf.getIntegerProperty("defaultRecommendationsCutoffDays", 7)
+
+  val defaultPageSize = conf.getIntegerProperty("defaultPageSize", 10)
 }
 
