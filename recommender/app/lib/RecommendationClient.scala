@@ -17,7 +17,6 @@ class RecommendationClient(baseUri: String) {
     num: Option[Int]
   ): Future[List[RecommendationItems]] = {
     val request = Json.toJson(RecommenderRequest(userId, fields, dateRangeFilter, num))
-    println(request)
     val recommendations = for {
       response <- WS.url(baseUri).post(request) if response.status == 200
     } yield response.json.validate[RecommendationResponse].map(_.itemScores).getOrElse(List.empty)
