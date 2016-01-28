@@ -8,7 +8,10 @@ lazy val root = (project in file("."))
   .settings(
     routesImport += "binders._",
     routesImport += "models._",
-    routesImport += "org.joda.time.DateTime"
+    routesImport += "org.joda.time.DateTime",
+    resolvers ++= Seq(
+      "Guardian GitHub Releases" at "http://guardian.github.com/maven/repo-releases",
+      "Guardian GitHub Snapshots" at "http://guardian.github.com/maven/repo-snapshots")
   )
 
 mappings in Universal ++= (baseDirectory.value / "resources" *** ).get pair relativeTo(baseDirectory.value)
