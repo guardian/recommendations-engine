@@ -1,4 +1,4 @@
-name := """mobile-recommender"""
+name := """recommender"""
 version := "1.0-SNAPSHOT"
 
 scalaVersion := "2.11.6"
