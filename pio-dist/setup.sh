@@ -14,6 +14,11 @@ cd /opt/
 wget https://d8k1yxp8elc6b.cloudfront.net/PredictionIO-0.9.5.tar.gz
 tar zxf PredictionIO-0.9.5.tar.gz
 
+mkdir PredictionIO-0.9.5/vendors
+
+wget http://d3kbcqa49mib13.cloudfront.net/spark-1.5.2-bin-hadoop2.6.tgz
+tar zxfC spark-1.5.2-bin-hadoop2.6.tgz PredictionIO-0.9.5/vendors
+
 mkdir /opt/PredictionIO-0.9.5/engines
 tar zxf /root/engine.tar.gz --directory /opt/PredictionIO-0.9.5/engines/
 
