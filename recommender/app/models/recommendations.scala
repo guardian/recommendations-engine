@@ -10,6 +10,7 @@ object QueryBoost {
 
 case class DateRangeFilter(name: String, before: Option[DateTime] = None, after: Option[DateTime] = None)
 object DateRangeFilter {
+  import models.JodaImplicits._
   implicit val jf = Json.format[DateRangeFilter]
 }
 
