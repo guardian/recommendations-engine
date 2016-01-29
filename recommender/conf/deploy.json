@@ -1,5 +1,5 @@
 {
-  "defaultStacks": [ "mobile-recommendations" ],
+  "defaultStacks": [ "recommendations" ],
   "packages": {
     "recommender": {
       "type": "autoscaling",
@@ -8,7 +8,7 @@
         "port": 18080,
         "healthcheckGrace": 20,
         "warmupGrace": 30,
-        "bucket": "mobile-recommendations-dist",
+        "bucket": "recommendations-dist",
         "healthcheck_paths": ["/healthcheck"],
         "publicReadAcl": false
       }

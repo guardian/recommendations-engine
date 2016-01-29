@@ -37,7 +37,7 @@ __END__
 wget https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
 python ./awslogs-agent-setup.py -n -r $region -c awslogs.conf
 
-aws s3 cp s3://mobile-recommendations-dist/$stagetag/recommender/$apptag.properties /etc/gu/$apptag.properties
+aws s3 cp s3://recommendations-dist/$stagetag/recommender/mobile-recommender.properties /etc/gu/$apptag.properties
 cp /$apptag-1.0-SNAPSHOT/conf/init.conf /etc/init/recommender.conf
 
 start recommender
