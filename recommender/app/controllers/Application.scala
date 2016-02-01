@@ -22,10 +22,14 @@ object Application extends Controller {
     Ok
   }
 
+  def hydrateRecommendation(recommendation: RecommendationItems) = {
+    ItemHydrator.item(recommendation.item) map { optItem =>
+      optItem.map { item => s"""{"score":${recommendation.score},"item":$item}""" }
+    }
+  }
+
   def hydrateRecommendations(recommendations: List[RecommendationItems]): Future[List[String]] =
-    Future.sequence {
-      recommendations map { item => ItemHydrator.item(item.item) }
-    } map { _.flatten }
+    Future.sequence { recommendations map hydrateRecommendation } map { _.flatten }
 
   def recommendations(
     userId: String,
