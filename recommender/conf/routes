@@ -4,4 +4,5 @@
 
 GET        /healthcheck                     controllers.Application.healthCheck
 
-GET        /recommendations/:userId         controllers.Application.recommendations(userId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
+GET        /recommendations/:userId         controllers.Application.recommendationsFromUserId(userId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
+POST       /recommendations                 controllers.Application.recommendationsFromArticleIds

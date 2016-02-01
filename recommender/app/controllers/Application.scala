@@ -1,6 +1,6 @@
 package controllers
 
-import models.{RecommendationItems, DateRangeFilter, QueryBoost}
+import models._
 import org.joda.time.DateTime
 import play.api.mvc._
 
@@ -8,6 +8,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import lib.{RecommendationClient, ItemHydrator}
 import data.RecommenderConfiguration._
+import play.api.mvc.BodyParsers.parse.{json => BodyJson}
 
 object Application extends Controller {
 
@@ -31,7 +32,7 @@ object Application extends Controller {
   def hydrateRecommendations(recommendations: List[RecommendationItems]): Future[List[String]] =
     Future.sequence { recommendations map hydrateRecommendation } map { _.flatten }
 
-  def recommendations(
+  def recommendationsFromUserId(
     userId: String,
     webPublicationDate: Option[DateRangeFilter],
     tags: Option[QueryBoost],
@@ -46,11 +47,30 @@ object Application extends Controller {
     val num = pageSize orElse Some(defaultPageSize)
 
     for {
-      recommendations <- recommendationsClient.getRecommendations(userId, tags.toList, dateFilter, num)
+      recommendations <- recommendationsClient.getRecommendations(Some(userId), tags.toList, dateFilter, num)
       hydratedRecommendations <- hydrateRecommendations(recommendations)
     } yield {
       val contentJson = hydratedRecommendations.mkString("[", ",", "]")
       Ok(s"""{"content": $contentJson}""")
+    }
+  }
+
+  def recommendationsFromArticleIds() = Action.async(BodyJson[ApiRequest]) { request =>
+    val apiRequest = request.body
+    val dateFilter = apiRequest.webPublicationDate
+      .orElse(Some(defaultDateRangeFilter))
+      .filterNot(_ => apiRequest.disableDateFilter.contains(true))
+
+    val num = apiRequest.pageSize orElse Some(defaultPageSize)
+
+    val articles = QueryBoost(name = "view", values = apiRequest.articles, bias = 1.0f)
+
+    for {
+      recommendations <- recommendationsClient.getRecommendations(None, articles :: apiRequest.tags.toList, dateFilter, num, Some(apiRequest.articles))
+      hydratedRecommendations <- hydrateRecommendations(recommendations)
+    } yield {
+      val contentJson = hydratedRecommendations.mkString("[", ",", "]")
+      Ok( s"""{"content": $contentJson}""")
     }
   }
 
