@@ -1,9 +1,9 @@
 <configuration>
 
-    <contextName>mobile-distributor</contextName>
+    <contextName>recommender</contextName>
 
     <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/mobile-distributor.log</file>
+        <file>logs/recommender.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/mobile-distributor.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
