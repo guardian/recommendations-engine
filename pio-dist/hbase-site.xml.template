@@ -7,10 +7,10 @@
     </property>
     <property>
         <name>hbase.rootdir</name>
-        <value>hdfs://<HADOOP-MASTER>:8030/hbase</value>
+        <value>hdfs://@@HADOOP-MASTER:8030/hbase</value>
     </property>
     <property>
         <name>hbase.zookeeper.quorum</name>
-        <value><HADOOP-MASTER></value>
+        <value>@@HADOOP-MASTER</value>
     </property>
 </configuration>

@@ -5,7 +5,7 @@
 
 <configuration>
     <property>
-        <name>fs.default.name</name>
-        <value><HADOOP-MASTER>:9000</value>
+        <name>fs.defaultFS</name>
+        <value>hdfs://@@HADOOP-MASTER:9000/</value>
     </property>
 </configuration>
