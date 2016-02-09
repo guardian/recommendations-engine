@@ -31,10 +31,12 @@ mkdir /opt/PredictionIO-0.9.5/engines
 tar zxf /root/engine.tar.gz --directory /opt/PredictionIO-0.9.5/engines/
 
 mkdir -p PredictionIO-0.9.5/conf/hbase/
+mkdir -p PredictionIO-0.9.5/conf/hadoop/
 
 cp ${PIO_DIST}/hbase-env.sh PredictionIO-0.9.5/conf/hbase/
 
-sed "s/<HADOOP-MASTER>/$HADOOP_MASTER/g" ${PIO_DIST}/hbase-site.xml.template > PredictionIO-0.9.5/conf/hbase/hbase-site.xml
+sed "s/@@HADOOP-MASTER/$HADOOP_MASTER/g" ${PIO_DIST}/hbase-site.xml.template > PredictionIO-0.9.5/conf/hbase/hbase-site.xml
+sed "s/@@HADOOP-MASTER/$HADOOP_MASTER/g" ${PIO_DIST}/core-site.xml.template > PredictionIO-0.9.5/conf/hadoop/core-site.xml
 sed -e "s/@@ELASTICSEARCH-HOSTS/${ES_HOSTS}/g" \
   -e "s/@@ELASTICSEARCH-CLUSTERNAME/${ES_CLUSTER_NAME}/g" \
   -e "s/@@ELASTICSEARCH-HOSTS/${ES_HOSTS}/g" \
