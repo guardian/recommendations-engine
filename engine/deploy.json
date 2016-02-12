@@ -8,7 +8,8 @@
         "prefixPackage": true,
         "prefixStage": true,
         "prefixStack": false,
-        "publicReadAcl": false
+        "publicReadAcl": false,
+        "cacheControl": "max-age=0"
       }
     }
   },
