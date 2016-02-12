@@ -30,8 +30,8 @@ yes | ../bin/pio template get PredictionIO/template-scala-parallel-universal-rec
     --email 'mobile.server.side@theguardian.com' \
     MyGuardianTestEngine-1
 
-cp "$base/engine.json" MyGuardianTestEngine-1/
-
+cd MyGuardianTestEngine-1
+cp "$base/engine.json" .
 ../bin/pio build
 
 mkdir -p "$target/packages/common"
