@@ -1,0 +1,29 @@
+{
+  "defaultStacks": [ "recommend" ],
+  "packages": {
+    "common": {
+      "type": "aws-s3",
+      "data": {
+        "bucket": "recommendations-dist",
+        "prefixPackage": true,
+        "prefixStage": true,
+        "prefixStack": false,
+        "publicReadAcl": false
+      }
+    }
+  },
+
+  "recipes": {
+    "default": {
+      "depends": [
+        "deployCommon"
+      ]
+    },
+
+    "deployCommon": {
+      "actionsBeforeApp": [
+        "common.uploadStaticFiles"
+      ]
+    }
+  }
+}
