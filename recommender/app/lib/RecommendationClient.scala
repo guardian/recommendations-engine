@@ -19,7 +19,7 @@ class RecommendationClient(baseUri: String) {
   ): Future[List[RecommendationItems]] = {
     val request = Json.toJson(RecommenderRequest(userId, fields, dateRangeFilter, num, blacklistItems))
     val recommendations = for {
-      response <- WS.url(baseUri).post(request) if response.status == 200
+      response <- WS.url(s"$baseUri/queries.json").post(request) if response.status == 200
     } yield response.json.validate[RecommendationResponse].map(_.itemScores).getOrElse(List.empty)
 
     recommendations recover { case _ => List.empty }
