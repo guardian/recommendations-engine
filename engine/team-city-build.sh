@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 script="$(cd "${0%/*}" 2>/dev/null; echo "$PWD"/"${0##*/}")"
 base="$(dirname "${script}")"
 buildStamp="$1"
