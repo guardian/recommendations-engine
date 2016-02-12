@@ -3,7 +3,7 @@ package data
 import com.gu.conf.ConfigurationFactory
 
 object RecommenderConfiguration {
-  private val conf = ConfigurationFactory.getConfiguration("mobile-recommender", "gu-conf")
+  private val conf = ConfigurationFactory.getConfiguration("recommender", "gu-conf")
 
   val predictionioBase = conf.getStringProperty("apis.predictionio.base", "")
 
