@@ -1,5 +1,5 @@
 {
-  "defaultStacks": [ "recommend" ],
+  "defaultStacks": [ "recommendations" ],
   "packages": {
     "common": {
       "type": "aws-s3",
