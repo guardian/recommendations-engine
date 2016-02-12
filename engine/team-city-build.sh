@@ -36,6 +36,7 @@ cp "$base/pio.sbt" .
 ../../sbt/sbt package assemblyPackageDependency
 
 mkdir -p "$target/packages/common"
+cd ..
 tar czf "$target/packages/common/engine.tar.gz" MyGuardianTestEngine-1
 
 cd "$target/"
