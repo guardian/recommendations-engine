@@ -30,6 +30,7 @@ yes | ../bin/pio template get PredictionIO/template-scala-parallel-universal-rec
 
 cd MyGuardianTestEngine-1
 cp "$base/engine.json" .
+cp "$base/manifest.json" . # this should be generated rather than being committed to the repo
 cp "$base/pio.sbt" .
 ../../sbt/sbt package assemblyPackageDependency
 
