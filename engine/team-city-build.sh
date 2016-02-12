@@ -32,7 +32,7 @@ yes | ../bin/pio template get PredictionIO/template-scala-parallel-universal-rec
 
 cd MyGuardianTestEngine-1
 cp "$base/engine.json" .
-../../bin/pio build --verbose
+../../sbt/sbt package assemblyPackageDependency
 
 mkdir -p "$target/packages/common"
 tar czf "$target/packages/common/engine.tar.gz" MyGuardianTestEngine-1
