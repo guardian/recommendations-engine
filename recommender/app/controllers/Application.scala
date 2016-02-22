@@ -14,7 +14,7 @@ object Application extends Controller {
 
   val recommendationsClient = new RecommendationClient(predictionioBase)
 
-  private val defaultDateRangeFilter = DateRangeFilter(
+  private def defaultDateRangeFilter = DateRangeFilter(
     name = "webPublicationDate",
     after = Some(DateTime.now.minusDays(defaultRecommendationsCutoffDays))
   )
