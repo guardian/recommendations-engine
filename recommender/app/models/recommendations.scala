@@ -14,24 +14,13 @@ object DateRangeFilter {
   implicit val jf = Json.format[DateRangeFilter]
 }
 
-case class RecommenderRequest(user: Option[String], fields: List[QueryBoost], dateRange: Option[DateRangeFilter], num: Option[Int], blacklistItems: Option[List[String]])
-object RecommenderRequest {
-  implicit val jf = Json.format[RecommenderRequest]
-}
-
 case class RecommendationItems(item: String, score: Double)
 object RecommendationItems {
   implicit val jf = Json.format[RecommendationItems]
 }
 
-case class RecommendationResponse(itemScores: List[RecommendationItems])
-object RecommendationResponse {
-  implicit val jf = Json.format[RecommendationResponse]
-}
-
 case class ApiRequest(
   webPublicationDate: Option[DateRangeFilter],
-  tags: Option[QueryBoost],
   disableDateFilter: Option[Boolean],
   pageSize: Option[Int],
   articles: List[String]

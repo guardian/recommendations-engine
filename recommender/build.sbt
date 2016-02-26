@@ -15,7 +15,9 @@ lazy val root = (project in file("."))
       json,
       "org.mockito" % "mockito-all" % "1.9.0" % "test",
       "org.scalacheck" %% "scalacheck" % "1.12.2" % "test",
-      "org.specs2" %% "specs2" % "2.3.12" % "test"
+      "org.specs2" %% "specs2" % "2.3.12" % "test",
+      "org.elasticsearch" % "elasticsearch" % "1.7.5",
+      "com.amazonaws" % "aws-java-sdk-ec2" % "1.10.55"
     ),
     routesImport += "binders._",
     routesImport += "models._",
