@@ -3,7 +3,8 @@ package lib
 import models._
 import org.elasticsearch.action.search.{SearchResponse, SearchType}
 import org.elasticsearch.client.transport.TransportClient
-import org.elasticsearch.index.query.{BoolQueryBuilder, QueryBuilders}
+import org.elasticsearch.index.query.BoolQueryBuilder
+import org.elasticsearch.index.query.QueryBuilders.{termsQuery, idsQuery, boolQuery}
 import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 import org.joda.time.DateTime
@@ -35,20 +36,17 @@ class Recommender(client: TransportClient) {
 
   private def prepareQuery(ids: List[String], dateFilter: Option[DateRangeFilter]) = {
     baseQuery(ids)
-      .must(dateFilter.map(_.rangeQuery))
+      .optAndThen(dateFilter.map(_.asMust))
       .andThen(filterTags)
       .andThen(addRecencyBias)
   }
 
-  private def baseQuery(ids: List[String]) = {
-    QueryBuilders
-      .boolQuery()
-      .should(QueryBuilders.termsQuery("view", ids: _*))
-      .mustNot(QueryBuilders.idsQuery().ids(ids: _*))
-  }
+  private def baseQuery(ids: List[String]) = boolQuery()
+    .should(termsQuery("view", ids: _*))
+    .mustNot(idsQuery().ids(ids: _*))
 
   private def filterTags(qb: BoolQueryBuilder) =
-    qb.mustNot(QueryBuilders.termsQuery("tags", "tone/minutebyminute"))
+    qb.mustNot(termsQuery("tags", "tone/minutebyminute"))
 
   private def addRecencyBias(qb: BoolQueryBuilder) = {
     def daysAgo(days: Int) = DateRangeFilter(
@@ -57,9 +55,9 @@ class Recommender(client: TransportClient) {
       before = Some(DateTime.now.minusDays(days - 1))
     )
 
-    qb.should(daysAgo(1).rangeQuery.boost(0.5f))
-      .should(daysAgo(2).rangeQuery.boost(0.2f))
-      .should(daysAgo(3).rangeQuery.boost(0.1f))
+    qb.should(daysAgo(1).asRangeQuery.boost(0.5f))
+      .should(daysAgo(2).asRangeQuery.boost(0.2f))
+      .should(daysAgo(3).asRangeQuery.boost(0.1f))
   }
 
   private def itemFromHit(item: SearchHit) =

@@ -2,7 +2,7 @@ package lib
 
 import models.DateRangeFilter
 import org.elasticsearch.action.{ActionListener, ListenableActionFuture}
-import org.elasticsearch.index.query.{RangeQueryBuilder, QueryBuilder, BoolQueryBuilder, QueryBuilders}
+import org.elasticsearch.index.query.{QueryBuilder, BoolQueryBuilder, QueryBuilders}
 import org.joda.time.{DateTimeZone, DateTime}
 import play.Logger
 
@@ -10,35 +10,24 @@ import scala.concurrent.Promise
 
 object ElasticSearchImplicits {
   implicit class EnrichedDateRangeFilter(filter: DateRangeFilter) {
-    def rangeQuery = {
+    def asMust: BoolQueryBuilder => BoolQueryBuilder = _.must(asRangeQuery)
+
+    def asRangeQuery = {
       def formatDate(d: DateTime) = d.withZone(DateTimeZone.UTC).toString("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
+      val before = filter.before.map(formatDate)
+      val after = filter.after.map(formatDate)
+
       QueryBuilders.rangeQuery(filter.name)
-        .gt(filter.after.map(formatDate))
-        .lt(filter.before.map(formatDate))
+        .optAndThen(qb => after.map(qb.gt))
+        .optAndThen(qb => before.map(qb.lt))
     }
   }
 
-  implicit class EnrichedRangeQueryBuilder(rangeQuery: RangeQueryBuilder) {
-    def gt(from: Option[String]) =
-      from.map(a => rangeQuery.gt(a)) getOrElse rangeQuery
-
-    def lt(from: Option[String]) =
-      from.map(a => rangeQuery.lt(a)) getOrElse rangeQuery
-  }
-
-  implicit class EnrichedBoolQueryBuilder(bool: BoolQueryBuilder) {
-    def should(qb: Option[QueryBuilder]) =
-      qb.map(a => bool.should(a)) getOrElse bool
-
-    def must(qb: Option[QueryBuilder]) =
-      qb.map(a => bool.must(a)) getOrElse bool
-
-    def mustNot(qb: Option[QueryBuilder]) =
-      qb.map(a => bool.mustNot(a)) getOrElse bool
-
-    def andThen(fn: BoolQueryBuilder => BoolQueryBuilder): BoolQueryBuilder =
-      fn(bool)
+  implicit class EnrichedQueryBuilder[T <: QueryBuilder](qb: T) {
+    def andThen(fn: T => T): T = fn(qb)
+    def optAndThen(fn: T => Option[T]): T = fn(qb).getOrElse(qb)
+    def optAndThen(optFn: Option[T => T]): T = optFn.map(_(qb)).getOrElse(qb)
   }
 
   implicit class EnrichedListenableActionFuture[T](result: ListenableActionFuture[T]) {
