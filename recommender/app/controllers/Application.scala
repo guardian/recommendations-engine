@@ -20,7 +20,7 @@ object Application extends Controller {
     import org.elasticsearch.transport.Transport.TransportSettings
 
     val settings = ImmutableSettings.settingsBuilder()
-      .put("cluster.name", "recommendations-PROD")
+      .put("cluster.name", clusterName)
       .put(TransportSettings.TRANSPORT_TCP_COMPRESS, "true").build()
 
     val transportAddresses = elasticsearchHosts.map { host =>

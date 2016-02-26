@@ -23,6 +23,8 @@ object RecommenderConfiguration extends ElasticSearchDiscovery {
 
   val stage = conf.getStringProperty("stage", "PROD")
 
+  val clusterName = s"recommendations-$stage"
+
   val staticElasticSearchHosts = conf.getStringProperty("elasticsearch.hosts").map(_.split(',').toList)
 
   def elasticsearchHosts: List[String] = {
