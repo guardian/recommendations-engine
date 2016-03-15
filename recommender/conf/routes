@@ -2,7 +2,7 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET        /healthcheck                     controllers.Application.healthCheck
+GET        /healthcheck                             controllers.Application.healthCheck
 
-# GET         /recommendations/:userId        controllers.Application.recommendationsFromUserId(userId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
-POST       /recommendations                 controllers.Application.recommendationsFromArticleIds
+GET        /recommendations/browsers/:browserId     controllers.Application.recommendationsFromBrowserId(browserId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
+POST       /recommendations                         controllers.Application.recommendationsFromArticleIds
