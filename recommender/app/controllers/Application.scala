@@ -63,13 +63,13 @@ object Application extends Controller {
     tags: Option[QueryBoost],
     disableDateFilter: Option[Boolean],
     pageSize: Option[Int]
-    ) = Action.async {
-    val dateFilter =
-      webPublicationDate
-        .orElse(Some(defaultDateRangeFilter))
-        .filterNot(_ => disableDateFilter.contains(true))
-
+  ) = Action.async {
     val num = pageSize getOrElse defaultPageSize
+
+    val dateFilter = if (disableDateFilter.contains(true))
+      None
+    else
+      webPublicationDate orElse Some(defaultDateRangeFilter)
 
     for {
       recommendations <- recommender.getRecommendations(browserId, dateFilter, num)
