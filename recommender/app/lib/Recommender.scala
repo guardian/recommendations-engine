@@ -1,5 +1,6 @@
 package lib
 
+import lib.userhistory.UserHistoryClient
 import models._
 import org.elasticsearch.action.search.{SearchResponse, SearchType}
 import org.elasticsearch.client.transport.TransportClient
@@ -10,8 +11,9 @@ import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 import org.joda.time.DateTime
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class Recommender(client: TransportClient) {
+class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClient) {
 
   import ElasticSearchImplicits._
 
@@ -20,10 +22,19 @@ class Recommender(client: TransportClient) {
   val popRank = "popRank"
   val popRankType = "double"
 
-  def getRecommendations(ids: List[String], dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int = 0) = {
+  def getRecommendations(id: String, dateFilter: Option[DateRangeFilter], pageSize: Int): Future[List[RecommendationItems]] =
+    getRecommendations(id, dateFilter, pageSize, offset = 0)
+
+  def getRecommendations(id: String, dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int): Future[List[RecommendationItems]] = {
+    userHistoryClient.articlesForBrowser(id) flatMap { articleIds =>
+      getRecommendations(articleIds, dateFilter, pageSize, offset)
+    }
+  }
+
+  def getRecommendations(ids: List[String], dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int = 0): Future[List[RecommendationItems]] = {
     val query = prepareQuery(ids, dateFilter)
 
-    client.prepareSearch(esIndex)
+    esClient.prepareSearch(esIndex)
       .setQuery(query)
       .setFrom(offset)
       .setSize(pageSize)

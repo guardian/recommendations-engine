@@ -1,5 +1,6 @@
 package controllers
 
+import lib.userhistory.UserHistoryClient
 import models._
 import org.joda.time.DateTime
 import play.api.mvc._
@@ -31,7 +32,12 @@ object Application extends Controller {
       .addTransportAddresses(transportAddresses: _*)
   }
 
-  val recommender = new Recommender(esClient)
+  private val userHistoryClient = new UserHistoryClient(
+    base = userHistory.base,
+    apiKey = userHistory.apiKey
+  )
+
+  private val recommender = new Recommender(esClient, userHistoryClient)
 
   private def defaultDateRangeFilter = DateRangeFilter(
     name = "webPublicationDate",
@@ -50,6 +56,29 @@ object Application extends Controller {
 
   def hydrateRecommendations(recommendations: List[RecommendationItems]): Future[List[String]] =
     Future.sequence { recommendations map hydrateRecommendation } map { _.flatten }
+
+  def recommendationsFromBrowserId(
+    browserId: String,
+    webPublicationDate: Option[DateRangeFilter],
+    tags: Option[QueryBoost],
+    disableDateFilter: Option[Boolean],
+    pageSize: Option[Int]
+  ) = Action.async {
+    val num = pageSize getOrElse defaultPageSize
+
+    val dateFilter = if (disableDateFilter.contains(true))
+      None
+    else
+      webPublicationDate orElse Some(defaultDateRangeFilter)
+
+    for {
+      recommendations <- recommender.getRecommendations(browserId, dateFilter, num)
+      hydratedRecommendations <- hydrateRecommendations(recommendations)
+    } yield {
+      val contentJson = hydratedRecommendations.mkString("[", ",", "]")
+      Ok( s"""{"content": $contentJson}""")
+    }
+  }
 
   def recommendationsFromArticleIds() = Action.async(BodyJson[ApiRequest]) { request =>
     val apiRequest = request.body

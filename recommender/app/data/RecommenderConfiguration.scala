@@ -27,6 +27,11 @@ object RecommenderConfiguration extends ElasticSearchDiscovery {
 
   val staticElasticSearchHosts = conf.getStringProperty("elasticsearch.hosts").map(_.split(',').toList)
 
+  object userHistory {
+    val base = conf.getStringProperty("apis.userhistory.base", "")
+    val apiKey = conf.getStringProperty("apis.userhistory.apiKey", "")
+  }
+
   def elasticsearchHosts: List[String] = {
     val hosts = staticElasticSearchHosts getOrElse findElasticsearchHostsInEc2
     Logger.info(s"Elasticsearch hosts: $hosts")
