@@ -62,9 +62,9 @@ object Application extends Controller {
     webPublicationDate: Option[DateRangeFilter],
     tags: Option[QueryBoost],
     disableDateFilter: Option[Boolean],
-    pageSize: Option[Int]
+    optPageSize: Option[Int]
   ) = Action.async {
-    val num = pageSize getOrElse defaultPageSize
+    val pageSize = optPageSize getOrElse defaultPageSize
 
     val dateFilter = if (disableDateFilter.contains(true))
       None
@@ -72,7 +72,7 @@ object Application extends Controller {
       webPublicationDate orElse Some(defaultDateRangeFilter)
 
     for {
-      recommendations <- recommender.getRecommendationsForBrowserId(browserId, dateFilter, num)
+      recommendations <- recommender.getRecommendationsForBrowserId(browserId, dateFilter, pageSize)
       hydratedRecommendations <- hydrateRecommendations(recommendations)
     } yield {
       val contentJson = hydratedRecommendations.mkString("[", ",", "]")
@@ -85,9 +85,9 @@ object Application extends Controller {
     webPublicationDate: Option[DateRangeFilter],
     tags: Option[QueryBoost],
     disableDateFilter: Option[Boolean],
-    pageSize: Option[Int]
+    optPageSize: Option[Int]
   ) = Action.async {
-    val num = pageSize getOrElse defaultPageSize
+    val pageSize = optPageSize getOrElse defaultPageSize
 
     val dateFilter = if (disableDateFilter.contains(true))
       None
@@ -95,7 +95,7 @@ object Application extends Controller {
       webPublicationDate orElse Some(defaultDateRangeFilter)
 
     for {
-      recommendations <- recommender.getRecommendationsForUserId(userId, dateFilter, num)
+      recommendations <- recommender.getRecommendationsForUserId(userId, dateFilter, pageSize)
       hydratedRecommendations <- hydrateRecommendations(recommendations)
     } yield {
       val contentJson = hydratedRecommendations.mkString("[", ",", "]")
