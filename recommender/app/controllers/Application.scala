@@ -72,7 +72,30 @@ object Application extends Controller {
       webPublicationDate orElse Some(defaultDateRangeFilter)
 
     for {
-      recommendations <- recommender.getRecommendations(browserId, dateFilter, num)
+      recommendations <- recommender.getRecommendationsForBrowserId(browserId, dateFilter, num)
+      hydratedRecommendations <- hydrateRecommendations(recommendations)
+    } yield {
+      val contentJson = hydratedRecommendations.mkString("[", ",", "]")
+      Ok( s"""{"content": $contentJson}""")
+    }
+  }
+
+  def recommendationsFromUserId(
+    userId: String,
+    webPublicationDate: Option[DateRangeFilter],
+    tags: Option[QueryBoost],
+    disableDateFilter: Option[Boolean],
+    pageSize: Option[Int]
+  ) = Action.async {
+    val num = pageSize getOrElse defaultPageSize
+
+    val dateFilter = if (disableDateFilter.contains(true))
+      None
+    else
+      webPublicationDate orElse Some(defaultDateRangeFilter)
+
+    for {
+      recommendations <- recommender.getRecommendationsForUserId(userId, dateFilter, num)
       hydratedRecommendations <- hydrateRecommendations(recommendations)
     } yield {
       val contentJson = hydratedRecommendations.mkString("[", ",", "]")
