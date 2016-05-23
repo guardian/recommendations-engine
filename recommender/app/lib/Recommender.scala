@@ -23,19 +23,13 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
   val popRankType = "double"
   val historySize = 50
 
-  def getRecommendationsForBrowserId(browserId: String, dateFilter: Option[DateRangeFilter], pageSize: Int): Future[List[RecommendationItems]] =
-    getRecommendationsForBrowserId(browserId, dateFilter, pageSize, offset = 0)
-
-  def getRecommendationsForBrowserId(browserId: String, dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int): Future[List[RecommendationItems]] = {
+  def getRecommendationsForBrowserId(browserId: String, dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int = 0): Future[List[RecommendationItems]] = {
     userHistoryClient.articlesForBrowser(browserId, historySize) flatMap { articleIds =>
       getRecommendations(articleIds, dateFilter, pageSize, offset)
     }
   }
 
-  def getRecommendationsForUserId(userId: String, dateFilter: Option[DateRangeFilter], pageSize: Int): Future[List[RecommendationItems]] =
-    getRecommendationsForUserId(userId, dateFilter, pageSize, offset = 0)
-
-  def getRecommendationsForUserId(userId: String, dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int): Future[List[RecommendationItems]] = {
+  def getRecommendationsForUserId(userId: String, dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int = 0): Future[List[RecommendationItems]] = {
     userHistoryClient.articlesForUserId(userId, historySize) flatMap { articleIds =>
       getRecommendations(articleIds, dateFilter, pageSize, offset)
     }
