@@ -7,7 +7,7 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import lib.{Recommender, ItemHydrator}
+import lib.{Auth, ItemHydrator, Recommender}
 import data.RecommenderConfiguration._
 import play.api.mvc.BodyParsers.parse.{json => BodyJson}
 
@@ -38,6 +38,8 @@ object Application extends Controller {
   )
 
   private val recommender = new Recommender(esClient, userHistoryClient)
+
+  private val auth = new Auth()
 
   private def defaultDateRangeFilter = DateRangeFilter(
     name = "webPublicationDate",
@@ -80,27 +82,32 @@ object Application extends Controller {
     }
   }
 
-  def recommendationsFromUserId(
-    userId: String,
+  def recommendationsForMe(
     webPublicationDate: Option[DateRangeFilter],
     tags: Option[QueryBoost],
     disableDateFilter: Option[Boolean],
     optPageSize: Option[Int]
-  ) = Action.async {
-    val pageSize = optPageSize getOrElse defaultPageSize
-
-    val dateFilter = if (disableDateFilter.contains(true))
-      None
-    else
-      webPublicationDate orElse Some(defaultDateRangeFilter)
-
-    for {
-      recommendations <- recommender.getRecommendationsForUserId(userId, dateFilter, pageSize)
-      hydratedRecommendations <- hydrateRecommendations(recommendations)
+  ) = Action.async { request =>
+    val recommendations = for {
+      token <- request.headers.get("GU-IdentityToken")
+      userId <- auth.userIdFromIdentityToken(token)
     } yield {
-      val contentJson = hydratedRecommendations.mkString("[", ",", "]")
-      Ok( s"""{"content": $contentJson}""")
+      val pageSize = optPageSize getOrElse defaultPageSize
+
+      val dateFilter = if (disableDateFilter.contains(true))
+        None
+      else
+        webPublicationDate orElse Some(defaultDateRangeFilter)
+
+      for {
+        recommendations <- recommender.getRecommendationsForUserId(userId, dateFilter, pageSize)
+        hydratedRecommendations <- hydrateRecommendations(recommendations)
+      } yield {
+        val contentJson = hydratedRecommendations.mkString("[", ",", "]")
+        Ok( s"""{"content": $contentJson}""")
+      }
     }
+    recommendations getOrElse Future.successful(Forbidden)
   }
 
   def recommendationsFromArticleIds() = Action.async(BodyJson[ApiRequest]) { request =>
