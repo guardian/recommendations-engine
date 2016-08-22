@@ -6,7 +6,7 @@
 
 You must set the properties below in the file `conf/gu-conf/DEV.properties`. The values for
 `elasticsearch.hosts` and `apis.userhistory.apiKey` are omitted, speak to @davidfurey or
-@maxspencer to get it:
+@maxspencer to get them:
 
     apis.predictionio.base=http://engine.mobile-aws.guardianapis.com:8000/queries.json
     apis.mobile-api.items.base=http://mobile-apps.guardianapis.com/items
