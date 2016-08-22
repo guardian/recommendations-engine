@@ -117,36 +117,25 @@ object Application extends Controller {
     recommendations getOrElse Future.successful(Forbidden)
   }
 
-  def recommendationsFromArticleIds() = Action.async(BodyJson[ApiRequest]) { request =>
+  def recommendations(optFormat: Option[String]) = Action.async(BodyJson[ApiRequest]) { request =>
     val apiRequest = request.body
     val dateFilter = apiRequest.webPublicationDate
       .orElse(Some(defaultDateRangeFilter))
       .filterNot(_ => apiRequest.disableDateFilter.contains(true))
-
     val num = apiRequest.pageSize getOrElse defaultPageSize
+    val format = optFormat getOrElse "mapi_items"
 
     for {
       recommendations <- recommender.getRecommendations(apiRequest.articles, dateFilter, num)
-      hydratedRecommendations <- hydrateRecommendations(recommendations)
+      formattedRecommendations <- {
+        if (format equals "mapi_links") {
+          linkRecommendations(recommendations)
+        } else {
+          hydrateRecommendations(recommendations)
+        }
+      }
     } yield {
-      val contentJson = hydratedRecommendations.mkString("[", ",", "]")
-      Ok( s"""{"content": $contentJson}""")
-    }
-  }
-
-  def recommendationLinksFromArticleIds() = Action.async(BodyJson[ApiRequest]) { request =>
-    val apiRequest = request.body
-    val dateFilter = apiRequest.webPublicationDate
-      .orElse(Some(defaultDateRangeFilter))
-      .filterNot(_ => apiRequest.disableDateFilter.contains(true))
-
-    val num = apiRequest.pageSize getOrElse defaultPageSize
-
-    for {
-      recommendations <- recommender.getRecommendations(apiRequest.articles, dateFilter, num)
-      linkedRecommendations <- linkRecommendations(recommendations)
-    } yield {
-      val contentJson = linkedRecommendations.mkString("[", ",", "]")
+      val contentJson = formattedRecommendations.mkString("[", ",", "]")
       Ok( s"""{"content": $contentJson}""")
     }
   }
