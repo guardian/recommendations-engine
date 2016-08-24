@@ -8,6 +8,7 @@ import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import lib.{Auth, ItemHydrator, Recommender}
+import data.RecommenderConfiguration
 import data.RecommenderConfiguration._
 import play.api.mvc.BodyParsers.parse.{json => BodyJson}
 
@@ -58,6 +59,12 @@ object Application extends Controller {
 
   def hydrateRecommendations(recommendations: List[RecommendationItems]): Future[List[String]] =
     Future.sequence { recommendations map hydrateRecommendation } map { _.flatten }
+
+  def linkRecommendation(recommendation: RecommendationItems) =
+    s"""{"score":${recommendation.score},"item":"${RecommenderConfiguration.mobileItems}/${recommendation.item}"}"""
+
+  def linkRecommendations(recommendations: List[RecommendationItems]): Future[List[String]] =
+    Future.successful { recommendations map linkRecommendation }
 
   def recommendationsFromBrowserId(
     browserId: String,
@@ -110,19 +117,23 @@ object Application extends Controller {
     recommendations getOrElse Future.successful(Forbidden)
   }
 
-  def recommendationsFromArticleIds() = Action.async(BodyJson[ApiRequest]) { request =>
+  def recommendations(format: Option[String]) = Action.async(BodyJson[ApiRequest]) { request =>
     val apiRequest = request.body
     val dateFilter = apiRequest.webPublicationDate
       .orElse(Some(defaultDateRangeFilter))
       .filterNot(_ => apiRequest.disableDateFilter.contains(true))
-
     val num = apiRequest.pageSize getOrElse defaultPageSize
+
+    val formatter: List[RecommendationItems] => Future[List[String]] = format match {
+      case Some("mapi_links") => linkRecommendations
+      case _ => hydrateRecommendations
+    }
 
     for {
       recommendations <- recommender.getRecommendations(apiRequest.articles, dateFilter, num)
-      hydratedRecommendations <- hydrateRecommendations(recommendations)
+      formattedRecommendations <- formatter(recommendations)
     } yield {
-      val contentJson = hydratedRecommendations.mkString("[", ",", "]")
+      val contentJson = formattedRecommendations.mkString("[", ",", "]")
       Ok( s"""{"content": $contentJson}""")
     }
   }

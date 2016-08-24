@@ -6,4 +6,4 @@ GET        /healthcheck                             controllers.Application.heal
 
 GET        /recommendations/browsers/:browserId     controllers.Application.recommendationsFromBrowserId(browserId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
 GET        /recommendations/users/me                controllers.Application.recommendationsForMe(webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
-POST       /recommendations                         controllers.Application.recommendationsFromArticleIds
+POST       /recommendations                         controllers.Application.recommendations(format: Option[String])
