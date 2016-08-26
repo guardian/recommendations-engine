@@ -1,13 +1,49 @@
 package recommender
 
+import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.{Calendar, Properties}
+
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+
+import scala.util.Random
+import scala.util.parsing.json._
 import scala.concurrent.duration._
+import scalaj.http.Http
 
 
 class BasicSimulation extends Simulation {
   val baseUrl = "http://engine.mobile.guardianapis.com"
   //val baseUrl = "http://localhost:9000"
+
+  val properties = new Properties()
+  properties.load(new FileInputStream("dev.properties"))
+
+  val todayArticlesResponse = Http("http://content.guardianapis.com/search")
+    .param("from-date", new SimpleDateFormat("y-M-d").format(Calendar.getInstance().getTime()))
+    .param("page-size", "50")
+    .param("api-key", properties.getProperty("capi.api_key"))
+    .asString
+  val todayArticlesJson = JSON.parseFull(todayArticlesResponse.body)
+
+  val response = todayArticlesJson.get.asInstanceOf[Map[String, Any]]("response")
+  val resultsArray = response.get.asInstanceOf[Map[String, Any]]("results")
+
+  val todayArticleIds = for {
+    result <- resultsArray.get.asInstanceOf[List[Map[String, Any]]]
+    id <- result.get("id")
+  } yield {
+    id.asInstanceOf[String]
+  }
+
+  def randomTodayArticleIds(): List[String] = {
+    // The -1 +1 ensures there's always at least one item in the result
+    Random.shuffle(todayArticleIds.get).take(Random.nextInt(10) + 40)
+  }
+
+  def randomBody(): String =
+    randomTodayArticleIds().mkString("""{"articles":["""", """","""", """"]}""")
 
   val httpConf = http
     .baseURL(baseUrl) // Here is the root for all relative URLs
@@ -17,36 +53,18 @@ class BasicSimulation extends Simulation {
     .acceptEncodingHeader("gzip, deflate")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:48.0) Gecko/20100101 Firefox/48.0")
 
-  val scn = scenario("Get recommendations") // A scenario is a chain of requests and pauses
-    .exec(http("healthcheck")
-    .get("/healthcheck")
+  val scn = scenario("get recommendations") // A scenario is a chain of requests and pauses
+    .exec(http("request 1")
+    .post("/recommendations")
+    .body(StringBody(randomBody()))
+    .asJSON
     .check(status.is(200))
+    .check(jsonPath("$.content"))
   )
-    /*
-    .pause(20.milliseconds) // Note that Gatling has recorded real time pauses
-    .exec(http("get home front")
-    .get(fromOrigin("frontUri"))
-    .check(jsonPath("$.layout[*]").ofType[Map[String, Any]].findAll.saveAs("layouts"))
-  )
-    .pause(20.milliseconds)
-    .foreach("${layouts}", "layout") {
-      exec({session =>
-        val layoutMap = session("layout").as[Map[String, Any]]
-        val containerUri = layoutMap("uri")
-        session.set("containerUri", containerUri)
-      }).exec(http("get container uri")
-        .get(fromOrigin("containerUri"))
-        .check(jsonPath("$.cards[0].item.links.relatedUri").optional.saveAs("relatedUri"))
-      )
-        .pause(20.milliseconds)
-        .doIf(session => session.contains("relatedUri")) {
-          exec(http("get related items")
-            .get(fromOrigin("relatedUri"))
-          )
-        }
 
-    }
-    */
-
-  setUp(scn.inject(rampUsers(50).over(30 seconds)).protocols(httpConf)) // was 100
+  //setUp(scn.inject(atOnceUsers(1)).protocols(httpConf))
+  setUp(scn.inject(
+    rampUsersPerSec(1) to(75) during(30 seconds),
+    constantUsersPerSec(75) during(300 seconds) randomized
+  )).protocols(httpConf)
 }
