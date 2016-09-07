@@ -4,18 +4,16 @@
 
 ### To configure
 
-You must set the properties below in the file `conf/gu-conf/DEV.properties`. The values for
-`elasticsearch.hosts` and `apis.userhistory.apiKey` are omitted, speak to @davidfurey or
-@maxspencer to get them:
+    cp conf/gu-conf/SAMPLE.properties conf/gu-conf/DEV.properties
 
-    apis.predictionio.base=http://engine.mobile-aws.guardianapis.com:8000/queries.json
-    apis.mobile-api.items.base=http://mobile-apps.guardianapis.com/items
-    elasticsearch.hosts=
-    apis.userhistory.apiKey=
-    apis.userhistory.base=https://user-history.guardianapis.com/v1
-    
-Next you must create a file `/etc/gu/install_vars` with the contents `INT_SERVICE_DOMAIN=DEV`
-to ensure the config is loaded from the `DEV.properties` file.
+Then open `DEV.properties` and fill in the values for the `elasticsearch.hosts` and
+`apis.userhistory.apiKey` properties which are ommitted for security reasons, speak to
+@davidfurey or @maxspencer to get them. Note: files in `conf/gu-conf` are ignored by
+Git.
+
+    echo "INT_SERVICE_DOMAIN=DEV" >> /etc/gu/install_vars
+
+To ensure the config is loaded from the `DEV.properties` file.
 
 ### To run
 
