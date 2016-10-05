@@ -25,9 +25,9 @@ tar zxfC /root/files/packages/elasticsearch-1.4.4.tar.gz PredictionIO-0.9.5/vend
 cp /root/files/elasticsearch-conf/elasticsearch.yml PredictionIO-0.9.5/vendors/elasticsearch-1.4.4/config/
 
 # Install hbase
-tar zxfC /root/files/packages/hbase-1.0.2-bin.tar.gz PredictionIO-0.9.5/vendors
-cp /root/files/hbase-conf/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
-cp /root/files/hbase-conf/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
+tar zxfC /root/files/packages/hbase-1.0.3-bin.tar.gz PredictionIO-0.9.5/vendors
+cp /root/files/hbase-conf/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.3/conf/
+cp /root/files/hbase-conf/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.3/conf/
 
 mkdir PredictionIO-0.9.5/conf/yarn
 cp /root/files/yarn-conf/core-site.xml.template PredictionIO-0.9.5/conf/yarn/
