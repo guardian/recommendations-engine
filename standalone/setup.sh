@@ -21,6 +21,8 @@ cp /root/files/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
 cp /root/files/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
 cp /root/files/pio-env.sh PredictionIO-0.9.5/conf/
 
+cp /root/files/train.sh PredictionIO-0.9.5/
+chmod +x PredictionIO-0.9.5/train.sh
 cp /root/files/find-cluster.sh PredictionIO-0.9.5/
 chmod +x PredictionIO-0.9.5/find-cluster.sh
 cp /root/files/update-yarn-config.sh PredictionIO-0.9.5/
