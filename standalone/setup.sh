@@ -21,9 +21,18 @@ cp /root/files/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
 cp /root/files/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
 cp /root/files/pio-env.sh PredictionIO-0.9.5/conf/
 
+cp /root/files/find-cluster.sh PredictionIO-0.9.5/
+chmod +x PredictionIO-0.9.5/find-cluster.sh
+cp /root/files/update-yarn-config.sh PredictionIO-0.9.5/
+chmod +x PredictionIO-0.9.5/update-yarn-config.sh
+
 mkdir PredictionIO-0.9.5/conf/hadoop
 cp /root/files/core-site.xml PredictionIO-0.9.5/conf/hadoop/
 cp /root/files/mapred-site.xml PredictionIO-0.9.5/conf/hadoop/
+
+mkdir PredictionIO-0.9.5/conf/yarn
+cp /root/files/yarn-conf/core-site.xml.template PredictionIO-0.9.5/conf/yarn/
+cp /root/files/yarn-conf/yarn-site.xml.template PredictionIO-0.9.5/conf/yarn/
 
 cp /root/files/java_home.sh /etc/profile.d/
 

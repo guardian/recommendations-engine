@@ -10,6 +10,8 @@
 # SPARK_HOME: Apache Spark is a hard dependency and must be configured.
 SPARK_HOME=$PIO_HOME/vendors/spark-1.5.2-bin-hadoop2.6/
 
+YARN_CONF_DIR=$PIO_HOME/conf/yarn
+
 # ES_CONF_DIR: You must configure this if you have advanced configuration for
 #              your Elasticsearch setup.
 # ES_CONF_DIR=/opt/elasticsearch
