@@ -18,6 +18,3 @@ pio app new MyGuardianTestEngine-1
 cp /root/files/engine.json MyGuardianTestEngine-1/
 
 pio build
-# pio train
-# pio train -- --master spark://<spark-master>:7077 --driver-memory 1200M
-# pio deploy
