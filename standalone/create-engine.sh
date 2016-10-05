@@ -6,8 +6,8 @@ mkdir engines
 
 cd engines
 
-yes | pio template get PredictionIO/template-scala-parallel-universal-recommendation \
-    --version v0.2.3 \
+yes | pio template get guardian/template-scala-parallel-universal-recommendation \
+    --version guardian-v1 \
     --name 'TheGuardianNews&Media' \
     --package 'com.gu' \
     --email 'mobile.server.side@theguardian.com' \
