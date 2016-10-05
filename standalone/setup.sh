@@ -16,9 +16,9 @@ tar zxfC elasticsearch-1.4.4.tar.gz PredictionIO-0.9.5/vendors
 wget http://mirrors.ukfast.co.uk/sites/ftp.apache.org/hbase/hbase-1.0.2/hbase-1.0.2-bin.tar.gz
 tar zxfC hbase-1.0.2-bin.tar.gz PredictionIO-0.9.5/vendors
 
-cp /root/files/elasticsearch.yml PredictionIO-0.9.5/vendors/elasticsearch-1.4.4/config/
-cp /root/files/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
-cp /root/files/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
+cp /root/files/elasticsearch-conf/elasticsearch.yml PredictionIO-0.9.5/vendors/elasticsearch-1.4.4/config/
+cp /root/files/hbase-conf/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
+cp /root/files/hbase-conf/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.2/conf/
 cp /root/files/pio-env.sh PredictionIO-0.9.5/conf/
 
 cp /root/files/train.sh PredictionIO-0.9.5/
@@ -29,8 +29,8 @@ cp /root/files/update-yarn-config.sh PredictionIO-0.9.5/
 chmod +x PredictionIO-0.9.5/update-yarn-config.sh
 
 mkdir PredictionIO-0.9.5/conf/hadoop
-cp /root/files/core-site.xml PredictionIO-0.9.5/conf/hadoop/
-cp /root/files/mapred-site.xml PredictionIO-0.9.5/conf/hadoop/
+cp /root/files/hadoop-conf/core-site.xml PredictionIO-0.9.5/conf/hadoop/
+cp /root/files/hadoop-conf/mapred-site.xml PredictionIO-0.9.5/conf/hadoop/
 
 mkdir PredictionIO-0.9.5/conf/yarn
 cp /root/files/yarn-conf/core-site.xml.template PredictionIO-0.9.5/conf/yarn/
