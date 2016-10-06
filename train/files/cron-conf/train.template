@@ -1,1 +1,1 @@
-0 */2 * * * ubuntu /opt/PredictionIO-0.9.5/train.sh ${stage} > /opt/PredictionIO-0.9.5/train.log 2>&1
+0 */2 * * * ubuntu /opt/PredictionIO-0.9.5/bin/train.sh ${stage} > /opt/PredictionIO-0.9.5/train.log 2>&1
