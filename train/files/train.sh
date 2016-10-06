@@ -2,7 +2,7 @@
 
 $STAGE=$1
 
-export HADOOP_USER_NAME=ec2-user
+export HADOOP_USER_NAME=ubuntu
 cd /opt/PredictionIO-0.9.5/
 bin/update-yarn-config.sh $STAGE
 bin/update-pio-config.sh $STAGE
