@@ -20,10 +20,11 @@ aws emr describe-cluster \
 
 master_public_dns=$(cat $tmp_description | jq ".Cluster.MasterPublicDnsName" -r)
 
-cat $tmp_description | \
-	jq ".Cluster.Tags | from_entries | .App == \"spark\" and .Stack == \"recommendations\" and .Stage == \"$STAGE\"" -e > /dev/null
+correct_cluster=$(cat $tmp_description | \
+    sed -e 's/Key/key/g' -e 's/Value/value/g' | \
+	jq ".Cluster.Tags | from_entries | .App == \"spark\" and .Stack == \"recommendations\" and .Stage == \"$STAGE\"")
 
-if [ $? -eq 0 ]; then
+if [ "$correct_cluster" = "true" ]; then
 	echo $master_public_dns
 	rm $tmp_description
 	exit 0
