@@ -17,7 +17,7 @@ cd /opt/
 # Install prediction.io
 tar zxf /root/files/packages/PredictionIO-0.9.5.tar.gz
 
-cp /root/files/pio-env.sh PredictionIO-0.9.5/conf/
+cp /root/files/pio-env.sh.template PredictionIO-0.9.5/conf/
 
 mkdir PredictionIO-0.9.5/conf/hadoop
 cp /root/files/hadoop-conf/core-site.xml PredictionIO-0.9.5/conf/hadoop/
