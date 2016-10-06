@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-$STAGE=$1
+STAGE=$1
 
 export HADOOP_USER_NAME=ubuntu
 cd /opt/PredictionIO-0.9.5/

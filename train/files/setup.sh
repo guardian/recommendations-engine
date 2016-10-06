@@ -25,8 +25,8 @@ mkdir PredictionIO-0.9.5/conf/hadoop
 cp /root/files/hadoop-conf/core-site.xml PredictionIO-0.9.5/conf/hadoop/
 cp /root/files/hadoop-conf/mapred-site.xml PredictionIO-0.9.5/conf/hadoop/
 
-sed -i "s/<-hdfs-namenode->/master-0.recommendations.$STAGE.internal/g" PredictionIO-0.9.5/conf/hadoop/core-site.xml
-sed -i "s/<-hdfs-namenode->/master-0.recommendations.$STAGE.internal/g" PredictionIO-0.9.5/conf/hadoop/mapred-site.xml
+sed -i "s/<-hdfs-namenode->/master-0.recommendations.$stagetag.internal/g" PredictionIO-0.9.5/conf/hadoop/core-site.xml
+sed -i "s/<-hdfs-namenode->/master-0.recommendations.$stagetag.internal/g" PredictionIO-0.9.5/conf/hadoop/mapred-site.xml
 
 mkdir PredictionIO-0.9.5/vendors
 
@@ -41,7 +41,7 @@ cp /root/files/elasticsearch-conf/elasticsearch.yml PredictionIO-0.9.5/vendors/e
 tar zxfC /root/files/packages/hbase-1.0.3-bin.tar.gz PredictionIO-0.9.5/vendors
 cp /root/files/hbase-conf/hbase-env.sh PredictionIO-0.9.5/vendors/hbase-1.0.3/conf/
 cp /root/files/hbase-conf/hbase-site.xml PredictionIO-0.9.5/vendors/hbase-1.0.3/conf/
-sed -i "s/<-hdfs-namenode->/master-0.recommendations.$STAGE.internal/g" PredictionIO-0.9.5/vendors/hbase-1.0.3/conf/hbase-site.xml
+sed -i "s/<-hdfs-namenode->/master-0.recommendations.$stagetag.internal/g" PredictionIO-0.9.5/vendors/hbase-1.0.3/conf/hbase-site.xml
 
 mkdir PredictionIO-0.9.5/conf/yarn
 cp /root/files/yarn-conf/core-site.xml.template PredictionIO-0.9.5/conf/yarn/
