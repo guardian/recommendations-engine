@@ -64,4 +64,4 @@ cp /root/files/java_home.sh /etc/profile.d/
 
 chown ubuntu.ubuntu -R PredictionIO-0.9.5
 
-sed "s/\${stage}/$stagetag/" /root/files/cron-conf/train.template > /etc/cron.d/train
+sudo -u ubuntu -s /opt/PredictionIO-0.9.5/bin/train.sh $stagetag > /opt/PredictionIO-0.9.5/train.log 2>&1
