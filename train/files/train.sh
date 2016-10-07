@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+source /etc/environment
+
 STAGE=$1
 
 export HADOOP_USER_NAME=ubuntu
