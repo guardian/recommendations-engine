@@ -2,13 +2,12 @@
 
 STAGE=$1
 
-active_clusters=$(aws emr list-clusters \
- 	--cluster-states RUNNING \
- 	--cluster-states WAITING \
- 	--cluster-states STARTING \
- 	--cluster-states BOOTSTRAPPING \
-	--region eu-west-1 \
-	| jq ".Clusters[].Id" -r)
+active_clusters=$(aws emr list-clusters --region eu-west-1 \
+    | jq ".Clusters[] |
+        select(.Status.State==\"WAITING\" or
+        .Status.State == \"RUNNING\" or
+        .Status.State == \"STARTING\" or
+        .Status.State == \"BOOTSTRAPPING\") | .Id" -r)
 
 tmp_description=`mktemp -t test-XXXXXXXX`
 
@@ -47,11 +46,11 @@ for i in {0..60}
 do
 
 aws emr describe-cluster \
-	--cluster-id $cluster_id \
+	--cluster-id $selected_cluster_id \
 	--region eu-west-1 \
 	> $tmp_description
 
-cluster_state=$(cat $tmp_description | jq ".Cluster.State.State" -r)
+cluster_state=$(cat $tmp_description | jq ".Cluster.Status.State" -r)
 
 if [ "$cluster_state" = "RUNNING" ] || [ "$cluster_state" = "WAITING" ]; then
   master_public_dns=$(cat $tmp_description | jq ".Cluster.MasterPublicDnsName" -r)
