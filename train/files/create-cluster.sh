@@ -8,14 +8,14 @@ aws emr create-cluster \
   --ec2-attributes '{
     "KeyName": "MobileAppsApiKeyPair",
     "AdditionalSlaveSecurityGroups": [
-      "sg-4a17e22c"
+      "sg-afac5dc9"
     ],
-    "InstanceProfile": "recommendations-spark-TEST-JobFlowInstanceProfile-SN1UHVBFF3ZW",
-    "SubnetId": "subnet-a7a13ec2",
+    "InstanceProfile": "recommendations-spark-PROD-JobFlowInstanceProfile-185YH7TWAH4ZN",
+    "SubnetId": "subnet-edc7409a",
     "EmrManagedSlaveSecurityGroup": "sg-fa9d0e9d",
     "EmrManagedMasterSecurityGroup": "sg-fc9d0e9b",
     "AdditionalMasterSecurityGroups": [
-      "sg-4b17e22d"
+      "sg-acac5dca"
     ]
   }' \
   --service-role EMR_DefaultRole \
