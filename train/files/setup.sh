@@ -55,6 +55,7 @@ tar zxfC engine.tar.gz PredictionIO-0.9.5/engines
 # Install training scripts
 cp /root/files/train.sh PredictionIO-0.9.5/bin/
 cp /root/files/discover-spark-cluster.sh PredictionIO-0.9.5/bin/
+cp /root/files/terminate-clusters.sh PredictionIO-0.9.5/bin/
 cp /root/files/update-yarn-config.sh PredictionIO-0.9.5/bin/
 cp /root/files/discover-elasticsearch-cluster.sh PredictionIO-0.9.5/bin/
 cp /root/files/update-pio-config.sh PredictionIO-0.9.5/bin/
