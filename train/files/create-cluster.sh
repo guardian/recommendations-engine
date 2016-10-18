@@ -16,7 +16,7 @@ aws emr create-cluster \
       "sg-afac5dc9"
     ],
     "InstanceProfile": "recommendations-spark-PROD-JobFlowInstanceProfile-185YH7TWAH4ZN",
-    "SubnetId": "subnet-edc7409a",
+    "SubnetId": "subnet-db4b9282",
     "EmrManagedSlaveSecurityGroup": "sg-fa9d0e9d",
     "EmrManagedMasterSecurityGroup": "sg-fc9d0e9b",
     "AdditionalMasterSecurityGroups": [
