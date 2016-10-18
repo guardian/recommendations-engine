@@ -2,6 +2,11 @@
 
 STAGE=$1
 
+if [ "$STAGE" != "PROD" ] && [ "$STAGE" != "CODE" ]; then
+    echo "Missing/invalid argument STAGE (valid stages are PROD or CODE)" 1>&2
+    exit 1
+fi
+
 aws emr create-cluster \
   --applications Name=Spark \
   --tags "App=spark" "Stage=$STAGE" "Stack=recommendations" \
