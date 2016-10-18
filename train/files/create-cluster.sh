@@ -30,7 +30,7 @@ aws emr create-cluster \
   --instance-groups '[
       {
         "InstanceCount": 4,
-        "BidPrice": "0.132",
+        "BidPrice": "0.15",
         "EbsConfiguration": {
           "EbsBlockDeviceConfigs": [
             {
@@ -43,11 +43,11 @@ aws emr create-cluster \
           ]
         },
         "InstanceGroupType": "CORE",
-        "InstanceType": "m4.large"
+        "InstanceType": "m4.xlarge"
       },
       {
         "InstanceCount": 1,
-        "BidPrice": "0.132",
+        "BidPrice": "0.15",
         "EbsConfiguration": {
           "EbsBlockDeviceConfigs": [
             {
@@ -60,7 +60,7 @@ aws emr create-cluster \
           ]
         },
         "InstanceGroupType": "MASTER",
-        "InstanceType": "m4.large"
+        "InstanceType": "m4.xlarge"
       }
     ]' \
   --region eu-west-1
