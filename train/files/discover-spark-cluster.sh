@@ -37,7 +37,7 @@ done
 # Create a new cluster if we couldn't find one
 if [ "$selected_cluster_id" = "none" ]; then
     echo "No existing spark cluster found.  Creating a new one" 1>&2
-    selected_cluster_id=$(bin/create-cluster.sh)
+    selected_cluster_id=$(bin/create-cluster.sh | jq ".ClusterId" -r)
 fi
 
 echo "Waiting for spark cluster $selected_cluster_id to become available"  1>&2
