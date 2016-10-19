@@ -10,6 +10,8 @@
 # SPARK_HOME: Apache Spark is a hard dependency and must be configured.
 SPARK_HOME=$PIO_HOME/vendors/spark-1.5.2-bin-hadoop2.6/
 
+YARN_CONF_DIR=$PIO_HOME/conf/yarn
+
 # ES_CONF_DIR: You must configure this if you have advanced configuration for
 #              your Elasticsearch setup.
 # ES_CONF_DIR=/opt/elasticsearch
@@ -20,7 +22,7 @@ HADOOP_CONF_DIR=$PIO_HOME/conf/hadoop
 
 # HBASE_CONF_DIR: You must configure this if you intend to run PredictionIO
 #                 with HBase on a remote cluster.
-HBASE_CONF_DIR=$PIO_HOME/vendors/hbase-1.0.2/conf
+HBASE_CONF_DIR=$PIO_HOME/vendors/hbase-1.0.3/conf
 
 # Filesystem paths where PredictionIO uses as block storage.
 PIO_FS_BASEDIR=$HOME/.pio_store
@@ -66,9 +68,9 @@ PIO_STORAGE_SOURCES_PGSQL_PASSWORD=pio
 
 # Elasticsearch Example
 PIO_STORAGE_SOURCES_ELASTICSEARCH_TYPE=elasticsearch
-PIO_STORAGE_SOURCES_ELASTICSEARCH_CLUSTERNAME=recommendations-cluster
-PIO_STORAGE_SOURCES_ELASTICSEARCH_HOSTS=10.248.141.253
-PIO_STORAGE_SOURCES_ELASTICSEARCH_PORTS=9300
+PIO_STORAGE_SOURCES_ELASTICSEARCH_CLUSTERNAME=recommendations-${stage}
+PIO_STORAGE_SOURCES_ELASTICSEARCH_HOSTS=${elasticsearch_host}
+PIO_STORAGE_SOURCES_ELASTICSEARCH_PORTS=${elasticsearch_port}
 PIO_STORAGE_SOURCES_ELASTICSEARCH_HOME=$PIO_HOME/vendors/elasticsearch-1.4.4
 
 # Local File System Example
@@ -77,7 +79,7 @@ PIO_STORAGE_SOURCES_LOCALFS_PATH=$PIO_FS_BASEDIR/models
 
 # HBase Example
 PIO_STORAGE_SOURCES_HBASE_TYPE=hbase
-PIO_STORAGE_SOURCES_HBASE_HOME=$PIO_HOME/vendors/hbase-1.0.2
+PIO_STORAGE_SOURCES_HBASE_HOME=$PIO_HOME/vendors/hbase-1.0.3
 
 # HDFS
 PIO_STORAGE_SOURCES_HDFS_TYPE=hdfs

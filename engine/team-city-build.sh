@@ -21,8 +21,8 @@ tar zxf PredictionIO-0.9.5.tar.gz
 mkdir PredictionIO-0.9.5/engines
 cd PredictionIO-0.9.5/engines
 
-yes | ../bin/pio template get PredictionIO/template-scala-parallel-universal-recommendation \
-    --version v0.2.3 \
+yes | ../bin/pio template get guardian/template-scala-parallel-universal-recommendation \
+    --version guardian-v1.1-rc1 \
     --name 'TheGuardianNews&Media' \
     --package 'com.gu' \
     --email 'mobile.server.side@theguardian.com' \
