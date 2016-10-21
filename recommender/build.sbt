@@ -19,7 +19,8 @@ lazy val root = (project in file("."))
       "org.elasticsearch" % "elasticsearch" % "1.7.5",
       "com.gu.identity" %% "identity-cookie" % "3.44",
       "com.gu.identity.api" %% "identity-api-client-lib" % "3.44" exclude("org.openengsb.wrapped", "com.google.guava-all") exclude("com.google.collections", "google-collections"),
-      "com.amazonaws" % "aws-java-sdk-ec2" % "1.10.55"
+      "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.11.4",
+      "com.amazonaws" % "aws-java-sdk-ec2" % "1.11.4"
     ),
     routesImport += "binders._",
     routesImport += "models._",

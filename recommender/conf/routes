@@ -3,6 +3,7 @@
 # ~~~~
 
 GET        /healthcheck                             controllers.Application.healthCheck
+GET        /healthchecks/last-successful-training   controllers.Application.lastSuccessfulTrain
 
 GET        /recommendations/browsers/:browserId     controllers.Application.recommendationsFromBrowserId(browserId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
 GET        /recommendations/users/me                controllers.Application.recommendationsForMe(webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])

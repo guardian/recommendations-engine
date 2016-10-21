@@ -9,6 +9,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import lib.{Auth, ItemHydrator, Recommender}
 import data.RecommenderConfiguration
+import lib.{Auth, Healthcheck, ItemHydrator, Recommender}
 import data.RecommenderConfiguration._
 import play.api.mvc.BodyParsers.parse.{json => BodyJson}
 
@@ -42,6 +43,8 @@ object Application extends Controller {
 
   private val auth = new Auth()
 
+  val healthcheck = new Healthcheck(recommender)
+
   private def defaultDateRangeFilter = DateRangeFilter(
     name = "webPublicationDate",
     after = Some(DateTime.now.minusDays(defaultRecommendationsCutoffDays))
@@ -49,6 +52,13 @@ object Application extends Controller {
 
   def healthCheck = Action {
     Ok
+  }
+
+  def lastSuccessfulTrain = Action.async {
+    recommender.getLastSuccessfulTrain().map {
+      case Some(date) => Ok(date.toString)
+      case None => InternalServerError
+    }
   }
 
   def hydrateRecommendation(recommendation: RecommendationItems) = {
