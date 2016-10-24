@@ -2,16 +2,20 @@ package lib
 
 import lib.userhistory.UserHistoryClient
 import models._
+import org.elasticsearch.action.admin.indices.get.GetIndexResponse
 import org.elasticsearch.action.search.{SearchResponse, SearchType}
 import org.elasticsearch.client.transport.TransportClient
 import org.elasticsearch.index.query.BoolQueryBuilder
-import org.elasticsearch.index.query.QueryBuilders.{termsQuery, idsQuery, boolQuery}
+import org.elasticsearch.index.query.QueryBuilders.{boolQuery, idsQuery, termsQuery}
 import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.sort.{SortBuilders, SortOrder}
 import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.Try
 
 class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClient) {
 
@@ -22,6 +26,21 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
   val popRank = "popRank"
   val popRankType = "double"
   val historySize = 50
+
+  import scala.collection.JavaConversions._
+
+  val indicesClient = esClient.admin().indices()
+
+  def getLastSuccessfulTrain(): Future[Option[DateTime]] = {
+    getIndexSettings(esIndex).map { optSettings =>
+      for {
+        settings <- optSettings
+        index <- Option(settings.getAsSettings("index"))
+        creationDateStr <- Option(index.get("creation_date"))
+        creationDateLong <- Try(creationDateStr.toLong).toOption
+      } yield new DateTime(creationDateLong, DateTimeZone.UTC)
+    }
+  }
 
   def getRecommendationsForBrowserId(browserId: String, dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int = 0): Future[List[RecommendationItems]] = {
     userHistoryClient.articlesForBrowser(browserId, historySize) flatMap { articleIds =>
@@ -56,6 +75,12 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
       .andThen(addRecencyBias)
   }
 
+  private def getIndexSettings(index: String): Future[Option[org.elasticsearch.common.settings.Settings]] = {
+    indicesClient.prepareGetIndex()
+      .setIndices(esIndex)
+      .execute().asScala map settingsFromResponse
+  }
+
   private def baseQuery(ids: List[String]) = boolQuery()
     .should(termsQuery("view", ids: _*))
     .mustNot(idsQuery().ids(ids: _*))
@@ -80,5 +105,8 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
 
   private def itemsFromResponse(response: SearchResponse) =
     response.getHits.asScala.toList.map(itemFromHit)
+
+  private def settingsFromResponse(response: GetIndexResponse) =
+    response.settings.valuesIt().toList.headOption
 
 }
