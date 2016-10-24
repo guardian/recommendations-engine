@@ -30,7 +30,7 @@ class Healthcheck(recommender: Recommender) {
       case Some(trainingTime) =>
         val metricRequest = new PutMetricDataRequest()
         metricRequest.setNamespace(s"${RecommenderConfiguration.stage}/recommendations")
-        val timeSinceLastTraining = Seconds.secondsBetween(DateTime.now, trainingTime)
+        val timeSinceLastTraining = Seconds.secondsBetween(trainingTime, DateTime.now)
         metricRequest.setMetricData(
           List(metric(
             name = "seconds_since_last_training",
