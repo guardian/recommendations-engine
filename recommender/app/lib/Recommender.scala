@@ -2,6 +2,7 @@ package lib
 
 import lib.userhistory.UserHistoryClient
 import models._
+import org.elasticsearch.action.admin.cluster.health.{ClusterHealthResponse, ClusterHealthStatus}
 import org.elasticsearch.action.admin.indices.get.GetIndexResponse
 import org.elasticsearch.action.search.{SearchResponse, SearchType}
 import org.elasticsearch.client.transport.TransportClient
@@ -30,6 +31,11 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
   import scala.collection.JavaConversions._
 
   val indicesClient = esClient.admin().indices()
+  val clusterAdminClient = esClient.admin().cluster()
+
+  def clusterHealthy(): Future[Boolean] = getClusterHealth().map { response =>
+    response.getStatus == ClusterHealthStatus.GREEN
+  }
 
   def getLastSuccessfulTrain(): Future[Option[DateTime]] = {
     getIndexSettings(esIndex).map { optSettings =>
@@ -77,8 +83,13 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
 
   private def getIndexSettings(index: String): Future[Option[org.elasticsearch.common.settings.Settings]] = {
     indicesClient.prepareGetIndex()
-      .setIndices(esIndex)
+      .setIndices(index)
       .execute().asScala map settingsFromResponse
+  }
+
+  private def getClusterHealth(): Future[ClusterHealthResponse] = {
+    clusterAdminClient.prepareHealth()
+      .execute().asScala
   }
 
   private def baseQuery(ids: List[String]) = boolQuery()

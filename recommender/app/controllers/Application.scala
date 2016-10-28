@@ -7,9 +7,8 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import lib.{Auth, ItemHydrator, Recommender}
 import data.RecommenderConfiguration
-import lib.{Auth, Healthcheck, ItemHydrator, Recommender}
+import lib.{Auth, MetricSender, ItemHydrator, Recommender}
 import data.RecommenderConfiguration._
 import play.api.mvc.BodyParsers.parse.{json => BodyJson}
 
@@ -43,7 +42,7 @@ object Application extends Controller {
 
   private val auth = new Auth()
 
-  val healthcheck = new Healthcheck(recommender)
+  val metricSender = new MetricSender(recommender)
 
   private def defaultDateRangeFilter = DateRangeFilter(
     name = "webPublicationDate",
@@ -58,6 +57,13 @@ object Application extends Controller {
     recommender.getLastSuccessfulTrain().map {
       case Some(date) => Ok(date.toString)
       case None => InternalServerError
+    }
+  }
+
+  def clusterHealthy = Action.async {
+    recommender.clusterHealthy().map {
+      case true => Ok("cluster healthy")
+      case false => Ok("cluster unhealthy")
     }
   }
 
