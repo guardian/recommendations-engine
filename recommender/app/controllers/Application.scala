@@ -7,7 +7,6 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import lib.{Auth, ItemHydrator, Recommender}
 import data.RecommenderConfiguration
 import lib.{Auth, MetricSender, ItemHydrator, Recommender}
 import data.RecommenderConfiguration._
@@ -43,7 +42,7 @@ object Application extends Controller {
 
   private val auth = new Auth()
 
-  val healthcheck = new MetricSender(recommender)
+  val metricSender = new MetricSender(recommender)
 
   private def defaultDateRangeFilter = DateRangeFilter(
     name = "webPublicationDate",
