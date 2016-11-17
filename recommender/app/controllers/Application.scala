@@ -44,6 +44,12 @@ object Application extends Controller {
 
   val metricSender = new MetricSender(recommender)
 
+  val recommendationsCorsHeaders = List(
+    "Access-Control-Allow-Origin" -> "*",
+    "Access-Control-Allow-Methods" -> "POST",
+    "Access-Control-Allow-Headers" -> "Content-Type"
+  )
+
   private def defaultDateRangeFilter = DateRangeFilter(
     name = "webPublicationDate",
     after = Some(DateTime.now.minusDays(defaultRecommendationsCutoffDays))
@@ -133,6 +139,10 @@ object Application extends Controller {
     recommendations getOrElse Future.successful(Forbidden)
   }
 
+  def recommendationsOptions = Action {
+    Ok.withHeaders(recommendationsCorsHeaders: _*)
+  }
+
   def recommendations(format: Option[String]) = Action.async(BodyJson[ApiRequest]) { request =>
     val apiRequest = request.body
     val dateFilter = apiRequest.webPublicationDate
@@ -150,7 +160,7 @@ object Application extends Controller {
       formattedRecommendations <- formatter(recommendations)
     } yield {
       val contentJson = formattedRecommendations.mkString("[", ",", "]")
-      Ok( s"""{"content": $contentJson}""")
+      Ok(s"""{"content": $contentJson}""").withHeaders(recommendationsCorsHeaders: _*)
     }
   }
 

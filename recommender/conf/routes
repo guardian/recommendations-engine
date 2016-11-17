@@ -9,3 +9,4 @@ GET        /healthchecks/cluster-healthy            controllers.Application.clus
 GET        /recommendations/browsers/:browserId     controllers.Application.recommendationsFromBrowserId(browserId, webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
 GET        /recommendations/users/me                controllers.Application.recommendationsForMe(webPublicationDate: Option[DateRangeFilter], tags: Option[QueryBoost], disableDateFilter: Option[Boolean], pageSize: Option[Int])
 POST       /recommendations                         controllers.Application.recommendations(format: Option[String])
+OPTIONS    /recommendations                         controllers.Application.recommendationsOptions
