@@ -150,7 +150,7 @@ object Application extends Controller {
       formattedRecommendations <- formatter(recommendations)
     } yield {
       val contentJson = formattedRecommendations.mkString("[", ",", "]")
-      Ok( s"""{"content": $contentJson}""")
+      Ok(s"""{"content": $contentJson}""").withHeaders("Access-Control-Allow-Origin" -> "*")
     }
   }
 
