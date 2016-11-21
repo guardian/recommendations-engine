@@ -47,7 +47,7 @@ object Application extends Controller {
   val recommendationsCorsHeaders = List(
     "Access-Control-Allow-Origin" -> "*",
     "Access-Control-Allow-Methods" -> "POST",
-    "Access-Control-Allow-Headers" -> "Content-Type"
+    "Access-Control-Allow-Headers" -> "Content-Type, X-Requested-With"
   )
 
   private def defaultDateRangeFilter = DateRangeFilter(
