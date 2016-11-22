@@ -43,7 +43,7 @@ aws emr create-cluster \
           ]
         },
         "InstanceGroupType": "CORE",
-        "InstanceType": "m4.xlarge"
+        "InstanceType": "m3.xlarge"
       },
       {
         "InstanceCount": 1,
@@ -60,7 +60,7 @@ aws emr create-cluster \
           ]
         },
         "InstanceGroupType": "MASTER",
-        "InstanceType": "m4.xlarge"
+        "InstanceType": "m3.xlarge"
       }
     ]' \
   --region eu-west-1
