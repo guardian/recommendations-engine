@@ -19,8 +19,8 @@
     "spark.executor.memory": "10g",
     "spark.default.parallelism": "4",
     "es.index.auto.create": "true",
-    "es.nodes": "10.248.6.137,10.248.4.26,10.248.5.199",
-    "es.nodes.discovery": "false"
+    "es.nodes": "${elasticsearch_host}",
+    "es.nodes.discovery": "true"
   },
   "algorithms": [
     {
