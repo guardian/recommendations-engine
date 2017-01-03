@@ -88,6 +88,12 @@ object Application extends Controller {
   def linkRecommendations(recommendations: List[RecommendationItems]): Future[List[String]] =
     Future.successful { recommendations map linkRecommendation }
 
+  def contentId(recommendation: RecommendationItems) =
+    s"""{"score":${recommendation.score},"id":"${recommendation.item}"}"""
+
+  def contentIds(recommendations: List[RecommendationItems]): Future[List[String]] =
+    Future.successful { recommendations map contentId }
+
   def recommendationsFromBrowserId(
     browserId: String,
     webPublicationDate: Option[DateRangeFilter],
@@ -152,6 +158,7 @@ object Application extends Controller {
 
     val formatter: List[RecommendationItems] => Future[List[String]] = format match {
       case Some("mapi_links") => linkRecommendations
+      case Some("content_ids") => contentIds
       case _ => hydrateRecommendations
     }
 
