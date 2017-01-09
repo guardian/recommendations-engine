@@ -63,15 +63,17 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
   def getRecommendations(ids: List[String], dateFilter: Option[DateRangeFilter], pageSize: Int, offset: Int = 0): Future[List[RecommendationItems]] = {
     val query = prepareQuery(ids, dateFilter)
 
-    esClient.prepareSearch(esIndex)
-      .setQuery(query)
-      .setFrom(offset)
-      .setSize(pageSize)
-      .setTypes(esType)
-      .setSearchType(SearchType.DEFAULT)
-      .addSort(SortBuilders.scoreSort().order(SortOrder.DESC))
-      .addSort(SortBuilders.fieldSort(popRank).unmappedType(popRankType).order(SortOrder.DESC))
-      .execute().asScala map itemsFromResponse
+    ElasticSearchFuture.safe {
+      esClient.prepareSearch(esIndex)
+        .setQuery(query)
+        .setFrom(offset)
+        .setSize(pageSize)
+        .setTypes(esType)
+        .setSearchType(SearchType.DEFAULT)
+        .addSort(SortBuilders.scoreSort().order(SortOrder.DESC))
+        .addSort(SortBuilders.fieldSort(popRank).unmappedType(popRankType).order(SortOrder.DESC))
+        .execute()
+    } map itemsFromResponse
   }
 
   private def prepareQuery(ids: List[String], dateFilter: Option[DateRangeFilter]) = {
@@ -81,15 +83,15 @@ class Recommender(esClient: TransportClient, userHistoryClient: UserHistoryClien
       .andThen(addRecencyBias)
   }
 
-  private def getIndexSettings(index: String): Future[Option[org.elasticsearch.common.settings.Settings]] = {
+  private def getIndexSettings(index: String): Future[Option[org.elasticsearch.common.settings.Settings]] = ElasticSearchFuture.safe {
     indicesClient.prepareGetIndex()
       .setIndices(index)
-      .execute().asScala map settingsFromResponse
-  }
+      .execute()
+  } map settingsFromResponse
 
-  private def getClusterHealth(): Future[ClusterHealthResponse] = {
+  private def getClusterHealth(): Future[ClusterHealthResponse] = ElasticSearchFuture.safe {
     clusterAdminClient.prepareHealth()
-      .execute().asScala
+      .execute()
   }
 
   private def baseQuery(ids: List[String]) = boolQuery()
