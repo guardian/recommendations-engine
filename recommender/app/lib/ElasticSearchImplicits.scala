@@ -29,20 +29,4 @@ object ElasticSearchImplicits {
     def optAndThen(fn: T => Option[T]): T = fn(qb).getOrElse(qb)
     def optAndThen(optFn: Option[T => T]): T = optFn.map(_(qb)).getOrElse(qb)
   }
-
-  implicit class EnrichedListenableActionFuture[T](result: ListenableActionFuture[T]) {
-    def asScala = {
-      val promise = Promise[T]()
-      result.addListener(new ActionListener[T] {
-        def onFailure(e: Throwable) {
-          Logger.error("Elasticsearch query failure", e)
-          promise.failure(e)
-        }
-        def onResponse(response: T) {
-          promise.success(response)
-        }
-      })
-      promise.future
-    }
-  }
 }
