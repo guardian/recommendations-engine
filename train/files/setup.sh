@@ -9,7 +9,7 @@ apt-get install -y jq
 # Fetch packages
 mkdir -p /root/files/packages
 cd /root/files/packages
-wget -nv https://d8k1yxp8elc6b.cloudfront.net/PredictionIO-0.9.5.tar.gz
+aws s3 cp s3://recommendations-dist/software/PredictionIO-0.9.5.tar.gz . --region eu-west-1
 wget -nv http://d3kbcqa49mib13.cloudfront.net/spark-1.5.2-bin-hadoop2.6.tgz
 wget -nv https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.4.tar.gz
 aws s3 cp s3://recommendations-dist/software/hbase-1.0.3-bin.tar.gz . --region eu-west-1
